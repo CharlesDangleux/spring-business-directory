@@ -1,15 +1,63 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <groupId>douai.learning.geek</groupId>
-    <artifactId>spring-business-directory</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-  </parent>
-  <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>douai.learning.geek</groupId>
+		<artifactId>spring-business-directory</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>douai.learning.geek</groupId>
-  <artifactId>spring-business-directory-webui</artifactId>
-  <version>${global.version}</version>
-  <packaging>war</packaging>
-
+	<groupId>douai.learning.geek</groupId>
+	<artifactId>spring-business-directory-webui</artifactId>
+	<version>${global.version}</version>
+	<packaging>war</packaging>
+	<build>
+		<!-- Plug ins de compression de fichiers HTML et JS-->
+		<plugins>
+			<plugin>
+				<groupId>com.tunyk.mvn.plugins.htmlcompressor</groupId>
+				<artifactId>htmlcompressor-maven-plugin</artifactId>
+				<version>1.1</version>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>html</goal>
+						</goals>
+						<configuration>
+							<srcFolder>${source.webapp}</srcFolder>
+							<targetFolder>${tempdir.htmlcomp}</targetFolder>
+							<javascriptHtmlSprite>false</javascriptHtmlSprite>
+							<compressJavaScript>true</compressJavaScript>
+							<fileExt>
+								<fileExt>html</fileExt>
+								<fileExt>jsp</fileExt>
+							</fileExt>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>yuicompressor-maven-plugin</artifactId>
+				<groupId>net.alchim31.maven</groupId>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>compress</goal>
+						</goals>
+						<configuration>
+							<excludes>
+								<exclude>**/*.min.js</exclude>
+							</excludes>
+							<nosuffix>true</nosuffix>
+							<linebreakpos>1000</linebreakpos>
+							<webappDirectory>${tempdir.yui}</webappDirectory>
+							<warSourceDirectory>${source.webapp}</warSourceDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
